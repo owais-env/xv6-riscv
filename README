@@ -1,8 +1,8 @@
 # xv6-riscv Extended: 10 Additional Kernel Features
 
 **Course:** Operating Systems
-**Instructor:** <professor name>
-**Team:** <Member A>, <Member B>, <Member C>
+**Instructor:** Sir Raza
+**Team:** Muhammad Owais, Muhammad Mudassir, Muhammad Shoaib
 **Base:** https://github.com/mit-pdos/xv6-riscv
 
 ## 1. Project Overview
@@ -60,6 +60,8 @@ Then run the feature's test program, e.g. `prioritytest`, `cowtest`, `symlinktes
 ## 7. References
 - xv6 book: https://pdos.csail.mit.edu/6.1810/2023/xv6/book-riscv-rev3.pdf
 - MIT 6.1810 labs: https://pdos.csail.mit.edu/6.1810/
+
+
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
 but is implemented for a modern RISC-V multiprocessor using ANSI C.
