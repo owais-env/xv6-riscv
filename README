@@ -1,3 +1,65 @@
+# xv6-riscv Extended: 10 Additional Kernel Features
+
+**Course:** Operating Systems
+**Instructor:** <professor name>
+**Team:** <Member A>, <Member B>, <Member C>
+**Base:** https://github.com/mit-pdos/xv6-riscv
+
+## 1. Project Overview
+This project extends the xv6-riscv teaching kernel with 10 new features across
+scheduling, memory management, the file system, and the system call interface.
+Each feature includes a user-level test program that demonstrates it.
+
+## 2. Proposed Features
+
+| # | Feature | Description | Owner | Difficulty |
+|---|---------|-------------|-------|------------|
+| 1 | Priority scheduler | Processes get a priority; `nice(n)` changes it; scheduler picks the highest priority | A | Medium |
+| 2 | MLFQ scheduler | Multiple queues with time slices and priority boost to prevent starvation | A | Hard |
+| 3 | Lazy allocation | `sbrk` only reserves address space; pages are allocated on first access (page fault) | B | Medium |
+| 4 | Copy-on-Write fork | Parent and child share pages until one writes; reference counting for pages | B | Hard |
+| 5 | Symbolic links | `symlink(target, path)` syscall, with link following and loop detection | C | Medium-Hard |
+| 6 | Large files | Doubly-indirect blocks to raise the max file size | C | Medium-Hard |
+| 7 | mmap/munmap | Map files into process memory with VMAs | B | Hard |
+| 8 | Kernel threads | `clone`/`join` syscalls plus a user-level thread library | C | Hard |
+| 9 | trace syscall | Prints the syscalls made by a process based on a mask | A | Easy-Medium |
+| 10 | sysinfo + ps | Reports free memory and process count; `ps` lists PID, name, state | A | Medium |
+
+## 3. Implementation Approach
+For each feature: files modified, new syscalls added, user test program,
+and how it was tested.
+
+## 4. Progress Report
+
+| # | Feature | Status | Progress | Notes |
+|---|---------|--------|----------|-------|
+| 1 | Priority scheduler | Not started | 0% | |
+| 2 | MLFQ scheduler | Not started | 0% | |
+| 3 | Lazy allocation | Not started | 0% | |
+| 4 | Copy-on-Write fork | Not started | 0% | |
+| 5 | Symbolic links | Not started | 0% | |
+| 6 | Large files | Not started | 0% | |
+| 7 | mmap/munmap | Not started | 0% | |
+| 8 | Kernel threads | Not started | 0% | |
+| 9 | trace syscall | In progress | 20% | Syscall number added |
+| 10 | sysinfo + ps | Not started | 0% | |
+
+**Overall progress:** X / 10 features complete
+
+### Weekly Log
+- **Week 1 (date):** Environment set up (Kali, QEMU, `make qemu` working). Repo
+  cloned. Features assigned to members.
+
+## 5. How to Build and Test
+make qemu
+Then run the feature's test program, e.g. `prioritytest`, `cowtest`, `symlinktest`.
+
+## 6. Challenges and Learnings
+(Fill in as you go.)
+
+## 7. References
+- xv6 book: https://pdos.csail.mit.edu/6.1810/2023/xv6/book-riscv-rev3.pdf
+- MIT 6.1810 labs: https://pdos.csail.mit.edu/6.1810/
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
 but is implemented for a modern RISC-V multiprocessor using ANSI C.
