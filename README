@@ -1,67 +1,72 @@
-# xv6-riscv Extended: 10 Additional Kernel Features
+# xv6-riscv Extended: Muhammad Owais (Memory Management)
 
-**Course:** Operating Systems
-**Instructor:** Sir Raza
-**Team:** Muhammad Owais, Muhammad Mudassir, Muhammad Shoaib
-**Base:** https://github.com/mit-pdos/xv6-riscv
+**Course:** Operating Systems / Computer System Architecture
+* *Instructor:** Sir Raza
+**Group:** <Muhammad Owais>, <Muhammad Shoaib>, <Muhammad Mudassir>
+**Base:** https://github.com/mit-pdos/xv6-riscv (base commit: <hash>)
 
-## 1. Project Overview
-This project extends the xv6-riscv teaching kernel with 10 new features across
-scheduling, memory management, the file system, and the system call interface.
-Each feature includes a user-level test program that demonstrates it.
+## 1. Overview
+This repo contains Member B's part of the group semester project. It extends
+the xv6-riscv memory management with lazy allocation, mmap, copy-on-write
+fork, and 2 MB superpages. The other members work in their own repos
+(Member A: scheduling/syscalls/perf counters; Member C: file system/cache/multicore).
+All three are merged in the final integrated repo: <link>.
 
-## 2. Proposed Features
+## 2. My Modules
 
-| # | Feature | Description | Owner | Difficulty |
-|---|---------|-------------|-------|------------|
-| 1 | Priority scheduler | Processes get a priority; `nice(n)` changes it; scheduler picks the highest priority | A | Medium |
-| 2 | MLFQ scheduler | Multiple queues with time slices and priority boost to prevent starvation | A | Hard |
-| 3 | Lazy allocation | `sbrk` only reserves address space; pages are allocated on first access (page fault) | B | Medium |
-| 4 | Copy-on-Write fork | Parent and child share pages until one writes; reference counting for pages | B | Hard |
-| 5 | Symbolic links | `symlink(target, path)` syscall, with link following and loop detection | C | Medium-Hard |
-| 6 | Large files | Doubly-indirect blocks to raise the max file size | C | Medium-Hard |
-| 7 | mmap/munmap | Map files into process memory with VMAs | B | Hard |
-| 8 | Kernel threads | `clone`/`join` syscalls plus a user-level thread library | C | Hard |
-| 9 | trace syscall | Prints the syscalls made by a process based on a mask | A | Easy-Medium |
-| 10 | sysinfo + ps | Reports free memory and process count; `ps` lists PID, name, state | A | Medium |
+| ID | Module | Description | Difficulty |
+|----|--------|-------------|-----------|
+| OS-3a | Lazy allocation | `sbrk` only grows the address space; pages are allocated on first access via page fault | Medium |
+| OS-2 | Copy-on-Write fork | Parent and child share pages read-only; a write fault copies the page; reference counting in `kalloc.c` | Hard |
+| OS-3b | mmap / munmap | Per-process VMA table; files are mapped into memory and loaded on page fault; dirty pages written back for MAP_SHARED | Hard |
+| ARCH-3 | Superpages (2 MB) | Level-1 leaf PTEs in the Sv39 page table to reduce page walks and TLB pressure | Hard |
 
-## 3. Implementation Approach
-For each feature: files modified, new syscalls added, user test program,
-and how it was tested.
+## 3. Files Modified
+| Module | Files |
+|--------|-------|
+| OS-3a | `kernel/sysproc.c`, `kernel/trap.c`, `kernel/vm.c` |
+| OS-2 | `kernel/vm.c`, `kernel/kalloc.c`, `kernel/trap.c`, `kernel/riscv.h` |
+| OS-3b | `kernel/sysfile.c`, `kernel/proc.h`, `kernel/proc.c`, `kernel/trap.c`, `kernel/syscall.*` |
+| ARCH-3 | `kernel/vm.c`, `kernel/kalloc.c`, `kernel/riscv.h` |
 
-## 4. Progress Report
+## 4. Test Programs
+| Module | Test | Run |
+|--------|------|-----|
+| OS-3a | `lazytest` | `$ lazytest` |
+| OS-2 | `cowtest` | `$ cowtest` |
+| OS-3b | `mmaptest` | `$ mmaptest` |
+| ARCH-3 | `supertest` | `$ supertest` |
 
-| # | Feature | Status | Progress | Notes |
-|---|---------|--------|----------|-------|
-| 1 | Priority scheduler | Not started | 0% | |
-| 2 | MLFQ scheduler | Not started | 0% | |
-| 3 | Lazy allocation | Not started | 0% | |
-| 4 | Copy-on-Write fork | Not started | 0% | |
-| 5 | Symbolic links | Not started | 0% | |
-| 6 | Large files | Not started | 0% | |
-| 7 | mmap/munmap | Not started | 0% | |
-| 8 | Kernel threads | Not started | 0% | |
-| 9 | trace syscall | In progress | 20% | Syscall number added |
-| 10 | sysinfo + ps | Not started | 0% | |
+## 5. Progress Report
 
-**Overall progress:** X / 10 features complete
+| Module | Status | Progress | Notes |
+|--------|--------|----------|-------|
+| OS-3a Lazy allocation | In progress | 10% | Studying page fault path |
+| OS-2 COW fork | Not started | 0% | |
+| OS-3b mmap/munmap | Not started | 0% | |
+| ARCH-3 Superpages | Not started | 0% | |
+
+**Overall:** 0 / 4 modules complete
 
 ### Weekly Log
-- **Week 1 (date):** Environment set up (Kali, QEMU, `make qemu` working). Repo
-  cloned. Features assigned to members.
+- **Week 1 (date):** Repo created from base commit, `make qemu` working,
+  studied xv6 book ch. 3 (page tables) and ch. 4 (traps).
 
-## 5. How to Build and Test
+## 6. Build and Test
 make qemu
-Then run the feature's test program, e.g. `prioritytest`, `cowtest`, `symlinktest`.
+$ lazytest
+$ usertests
 
-## 6. Challenges and Learnings
+## 7. Syscall Numbers
+My syscalls use numbers 30-39 to avoid conflicts at integration.
+
+## 8. Challenges and Learnings
 (Fill in as you go.)
 
-## 7. References
+## 9. References
 - xv6 book: https://pdos.csail.mit.edu/6.1810/2023/xv6/book-riscv-rev3.pdf
-- MIT 6.1810 labs: https://pdos.csail.mit.edu/6.1810/
-
-
+- MIT 6.1810 labs (lazy, cow, mmap): https://pdos.csail.mit.edu/6.1810/
+- RISC-V privileged spec (Sv39): https://riscv.org/technical/specifications/
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
 but is implemented for a modern RISC-V multiprocessor using ANSI C.
